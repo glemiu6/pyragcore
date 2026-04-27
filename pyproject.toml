@@ -1,6 +1,6 @@
 [project]
 name = "pyragcore"
-version = "0.1.0"
+version = "0.1.2"
 description = "A reusable RAG core library built on FAISS and Ollama"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -24,7 +24,7 @@ dependencies = [
 embeddings = ["sentence-transformers>=5.3.0"]
 ollama = ["langchain-ollama>=1.0.1", "langchain-core>=1.2.22"]
 voice = ["speechrecognition>=3.15.1", "gTTS>=2.5.4", "sounddevice>=0.5.5", "pyttsx3>=2.99"]
-all = ["ragcore[embeddings,ollama,voice]"]
+all = ["pyragcore[embeddings,ollama,voice]"]
 
 [dependency-groups]
 dev = [
