@@ -2,7 +2,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 from typing import List, Any
 from langid.langid import LanguageIdentifier,model
-from ..exceptions import EmbeddingException
+from pyragcore.exceptions import EmbeddingException
 class Embedder:
     def __init__(self,model_name:str="all-mpnet-base-v2"):
         """

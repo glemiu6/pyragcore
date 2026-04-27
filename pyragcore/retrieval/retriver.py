@@ -1,6 +1,6 @@
-from ..embeddings.embedder import Embedder
-from ..retrieval.vector_store import VectorStore
-from ..exceptions import RetrievalException
+from pyragcore.embeddings.embedder import Embedder
+from pyragcore.retrieval.vector_store import VectorStore
+from pyragcore.exceptions import RetrievalException
 
 class Retriver:
     def __init__(self,vector_store:VectorStore,embedder:Embedder):

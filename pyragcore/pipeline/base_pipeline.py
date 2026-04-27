@@ -1,9 +1,9 @@
 from abc import ABC,abstractmethod
-from ..retrieval.vector_store import VectorStore
-from ..llm.responder import Responder
-from ..embeddings.embedder import Embedder
-from ..retrieval.retriver import Retriver
-from ..utils_io.choose_model import choose_model
+from pyragcore.retrieval.vector_store import VectorStore
+from pyragcore.llm.responder import Responder
+from pyragcore.embeddings.embedder import Embedder
+from pyragcore.retrieval.retriver import Retriver
+from pyragcore.utils_io.choose_model import choose_model
 
 class BasePipeline(ABC):
     def __init__(self,persist_dir:str,output_folder:str):

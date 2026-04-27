@@ -1,5 +1,5 @@
 from langchain_ollama import OllamaLLM
-from ..llm.prompt import build_prompt
+from pyragcore.llm.prompt import build_prompt
 
 class Responder:
     def __init__(self,model_name="llama3.2"):
