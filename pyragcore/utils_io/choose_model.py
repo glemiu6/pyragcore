@@ -1,7 +1,7 @@
 import subprocess
 import sys
+from pyragcore.exceptions import ModelNotFoundException
 
-from ragcore.exceptions import ModelNotFoundException
 def choose_model()->str|None:
     try:
         result = subprocess.run(["ollama", "list"], capture_output=True, text=True)
