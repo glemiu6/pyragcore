@@ -19,7 +19,7 @@ A reusable, modular RAG (Retrieval-Augmented Generation) core library built on F
 ## Installation
 
 ```bash
-pip install pyragcore          # core only (FAISS + tqdm)
+pip install pyragcore          # core only (FAISS + tqdm + langchain-text-splitters)
 pip install pyragcore[embeddings]  # + SentenceTransformers
 pip install pyragcore[ollama]      # + Ollama LLM
 pip install pyragcore[voice]       # + speech input/output
@@ -34,7 +34,7 @@ pip install pyragcore[all]         # everything
 from pyragcore.pipeline.base_pipeline import BasePipeline
 from pyragcore.embeddings.embedder import Embedder
 from pyragcore.retrieval.vector_store import VectorStore
-from pyragcore.retrieval.retriver import Retriver
+from pyragcore.retrieval.retriver import Retriever
 from pyragcore.llm.responder import Responder
 
 # Extend BasePipeline for your use case
