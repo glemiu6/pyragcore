@@ -389,8 +389,8 @@ class VectorStore:
         """
         import numpy as np
         qu=np.array(query_embedding,dtype=np.float32).reshape(1,-1)
-        D,I = self.index.search(qu,k*4)
-        candidates=[i for i in I[0] if i>=0]
+        distance,indices = self.index.search(qu,k*4)
+        candidates=[i for i in indices[0] if i>=0]
         candidate_emb=[self.embeddings[i] for i in candidates]
 
         selected_idx=[]
@@ -420,7 +420,7 @@ class VectorStore:
 
         return [self.documents[candidates[idx]] for idx in selected_idx]
 
-    def get_by_id(self,id:str) -> dict:
+    def get_by_id(self,id:str) -> dict|None:
         """
             Retrieve a single document by its unique ID.
 
