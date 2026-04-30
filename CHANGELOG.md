@@ -1,3 +1,6 @@
+## 0.1.11
+- fix dependency issues for darwin and linux systems on cuda
+
 ## 0.1.10
 - resolve error for `__init__.py`
 

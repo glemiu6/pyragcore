@@ -1,6 +1,6 @@
 [project]
 name = "pyragcore"
-version = "0.1.10"
+version = "0.1.11"
 description = "A reusable RAG core library built on FAISS and Ollama"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -36,3 +36,30 @@ dev = [
 
 [tool.setuptools.package-data]
 pyragcore = ["py.typed"]
+
+[tool.uv]
+index-strategy = "unsafe-best-match"
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin'",
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cuda", marker = "sys_platform == 'linux'" },
+    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+]
+torchvision = [
+    { index = "pytorch-cuda", marker = "sys_platform == 'linux'" },
+    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
