@@ -2,7 +2,7 @@
 from pyragcore.pipeline.base_pipeline import BasePipeline
 from pyragcore.embeddings.embedder import Embedder
 from pyragcore.retrieval.vector_store import VectorStore
-from pyragcore.retrieval.retriver import Retriver
+from pyragcore.retrieval.retriver import Retriever
 from pyragcore.llm.responder import Responder
 from pyragcore.ingestion.base_loader import BaseLoader
 from pyragcore.ingestion.base_chunker import BaseChunker
@@ -19,7 +19,7 @@ __all__ = [
     "BasePipeline",
     "Embedder",
     "VectorStore",
-    "Retriver",
+    "Retriever",
     "Responder",
     "BaseLoader",
     "BaseChunker",
