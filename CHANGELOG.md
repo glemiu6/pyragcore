@@ -1,3 +1,6 @@
+## 0.1.10
+- resolve error for `__init__.py`
+
 ## 0.1.9
 - cleaner re-export 
 - corrected the name of the `Retriever` class

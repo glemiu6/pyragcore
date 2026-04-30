@@ -1,6 +1,6 @@
 [project]
 name = "pyragcore"
-version = "0.1.9"
+version = "0.1.10"
 description = "A reusable RAG core library built on FAISS and Ollama"
 readme = "README.md"
 requires-python = ">=3.13"
