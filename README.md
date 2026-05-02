@@ -3,6 +3,7 @@
 A reusable, modular RAG (Retrieval-Augmented Generation) core library built on FAISS and Ollama. Use it as the foundation for any AI project that needs document ingestion, semantic search, and LLM-powered responses.
 
 ---
+
 ![PyPI](https://img.shields.io/pypi/v/pyragcore)
 ![Downloads](https://img.shields.io/pypi/dm/pyragcore)
 ![Python](https://img.shields.io/badge/python-3.13+-blue)
