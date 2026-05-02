@@ -44,7 +44,7 @@ pip install pyragcore[all]         # everything
 ```python
 from pyragcore.pipeline.base_pipeline import BasePipeline
 from pyragcore.embeddings.sentencetransformerembedder import SentenceTransformerEmbedder
-from pyragcore.retrieval.vector_store import VectorStore
+from pyragcore.retrieval.vector_store import FaissVectorStore
 from pyragcore.retrieval.retriver import FaissRetriever
 from pyragcore.llm.ollama_llm import Responder
 
@@ -168,12 +168,12 @@ class MyPipeline(BasePipeline):
 
 ---
 
-## VectorStore
+## FaissVectorStore
 
 ```python
-from pyragcore.retrieval.vector_store import VectorStore
+from pyragcore.retrieval.vector_store import FaissVectorStore
 
-store = VectorStore(dim=768, persist_path="./memory", autosave=True)
+store = FaissVectorStore(dim=768, persist_path="./memory", autosave=True)
 
 # add documents
 store.add(embeddings=[[...]], documents=["text"], metadata=[{"file_id": "abc"}], ids=["id_0"])

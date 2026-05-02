@@ -1,7 +1,7 @@
 #pyragcore/__init__.py
 from pyragcore.pipeline.base_pipeline import BasePipeline
 from pyragcore.embeddings.sentencetransformerembedder import SentenceTransformerEmbedder
-from pyragcore.retrieval.vector_store import VectorStore
+from pyragcore.retrieval.vector_store import FaissVectorStore
 from pyragcore.retrieval.retriver import FaissRetriever
 from pyragcore.llm.ollama_llm import OllamaResponder
 
@@ -26,7 +26,7 @@ __all__ = [
     # concrete classes
     "BasePipeline",
     "SentenceTransformerEmbedder",
-    "VectorStore",
+    "FaissVectorStore",
     "FaissRetriever",
     "OllamaResponder",
     # interfaces

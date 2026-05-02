@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 
-from pyragcore import SentenceTransformerEmbedder, VectorStore, FaissRetriever, OllamaResponder
+from pyragcore import SentenceTransformerEmbedder, FaissVectorStore, FaissRetriever, OllamaResponder
 from pyragcore.interfaces.base_embedder import BaseEmbedder
 from pyragcore.interfaces.base_vector_store import BaseVectorStore
 from pyragcore.utils_io.choose_model import choose_model
@@ -15,10 +15,10 @@ class BasePipeline(ABC):
         self.output_folder=output_folder
         self.model_name= model_name or choose_model()
         self.embedder = embedder or SentenceTransformerEmbedder()
-        self.vector_store = vector_store or VectorStore(dim=self.embedder.get_dimension(),
-                                        persist_path=self.persist_dir,
-                                        autosave=True,
-                                        load_if_exist=True)
+        self.vector_store = vector_store or FaissVectorStore(dim=self.embedder.get_dimension(),
+                                                             persist_path=self.persist_dir,
+                                                             autosave=True,
+                                                             load_if_exist=True)
         self.retriever = FaissRetriever(self.vector_store, self.embedder)
         self.llm = OllamaResponder(self.model_name)
         self._voice = None

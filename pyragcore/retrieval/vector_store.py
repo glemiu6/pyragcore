@@ -6,7 +6,7 @@ from typing import Optional
 from tqdm import tqdm
 from pyragcore.exceptions import VectorStoreException
 from pyragcore.interfaces.base_vector_store import BaseVectorStore
-class VectorStore(BaseVectorStore):
+class FaissVectorStore(BaseVectorStore):
     def __init__(self,dim:int,persist_path:str,index_type:str="flat",metric:str="l2",normalizr:bool=True,autosave:bool=True,load_if_exist:bool=True):
         self.dim=dim
         self.persist_path=persist_path

@@ -1,9 +1,15 @@
+## 0.2.1
+- rename `Retriever`->`FaissRetriever`
+- rename `Embedder`->`SentenceTransformerEmbedder`
+- rename `VectorStore`->`FaissVectorStore`
+- rename `Responder`->`OllamaLLM`
+
 ## 0.2.0
 - Added backend agnostic interfaces (`BaseEmbedder`, `BaseVectorStore`, `BaseLLM`, `BaseRetriever`)
 - Moved `BaseLoader` and `BaseChunker` to `interfaces/` folder
 - `BasePipeline` now accepts custom `embedder` and `vector_store` implementations
 - `SentenceTransformerEmbedder` now implements `BaseEmbedder` interface
-- `VectorStore` now implements `BaseVectorStore` interface
+- `FaissVectorStore` now implements `BaseVectorStore` interface
 - `FaissRetriever` now implements `BaseRetriever` interface
 - Added `get_dimension()` method to `SentenceTransformerEmbedder`
 - `model_name` parameter is now optional in `BasePipeline` — prompts user if not provided
