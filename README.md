@@ -5,6 +5,8 @@ A reusable, modular RAG (Retrieval-Augmented Generation) core library built on F
 ---
 ![PyPI](https://img.shields.io/pypi/v/pyragcore)
 ![Downloads](https://img.shields.io/pypi/dm/pyragcore)
+![Python](https://img.shields.io/badge/python-3.13+-blue)
+![License](https://img.shields.io/github/license/glemiu6/pyragcore)
 
 ---
 ## Features
@@ -18,7 +20,13 @@ A reusable, modular RAG (Retrieval-Augmented Generation) core library built on F
 - 📦 **Modular optional dependencies** — install only what you need
 
 ---
+## Requirements
 
+- Python 3.13+
+- [Ollama](https://ollama.com) installed and running (for LLM features)
+- NVIDIA GPU with CUDA 12.8+ (optional, falls back to CPU)
+
+---
 ## Installation
 
 ```bash
@@ -58,25 +66,37 @@ print(answer)
 
 ```
 pyragcore/
-├── embeddings/
-│   └── embedder.py          # SentenceTransformer wrapper with GPU support
-├── retrieval/
-│   ├── vector_store.py      # FAISS vector store with persistence
-│   └── retriver.py          # Semantic search with metadata filtering
-├── ingestion/
-│   ├── base_loader.py       # Abstract base loader
-│   ├── base_chunker.py      # Abstract base chunker
-│   └── chunker.py           # Token-based chunker (tiktoken)
-├── llm/
-│   ├── responder.py         # Ollama LLM wrapper
-│   └── prompt.py            # Prompt builder with chat history
-├── pipeline/
-│   └── base_pipeline.py     # Abstract base pipeline
-├── utils_io/
-│   ├── voice.py             # Speech input/output
-│   ├── choose_model.py      # Ollama model picker
-│   └── logger.py            # Logging utility
-└── exceptions.py            # Custom exceptions
+├── CHANGELOG.md
+├── LICENSE
+├── pyproject.toml
+├── py.typed
+├── README.md
+└── pyragcore
+    ├── embeddings
+    │   └── embedder.py
+    ├── exceptions.py
+    ├── ingestion
+    │   └── chunker.py
+    ├── interfaces
+    │   ├── base_chunker.py
+    │   ├── base_embedder.py
+    │   ├── base_llm.py
+    │   ├── base_loader.py
+    │   ├── base_retriever.py
+    │   └── base_vector_store.py
+    ├── llm
+    │   ├── prompt.py
+    │   └── responder.py
+    ├── pipeline
+    │   └── base_pipeline.py
+    ├── retrieval
+    │   ├── retriver.py
+    │   └── vector_store.py
+    └── utils_io
+        ├── choose_model.py
+        ├── logger.py
+        └── voice.py
+
 ```
 
 ---
@@ -87,9 +107,10 @@ Extend `BasePipeline` and implement `ingest()`:
 
 ```python
 from pyragcore.pipeline.base_pipeline import BasePipeline
-from pyragcore.ingestion.base_loader import BaseLoader
+from interfaces.base_loader import BaseLoader
 from pyragcore.ingestion.chunker import Chunker
 from tqdm import tqdm
+
 
 class MyLoader(BaseLoader):
     def read(self, path) -> dict:
@@ -102,6 +123,7 @@ class MyLoader(BaseLoader):
                 "source": path,
             }
         }
+
 
 class MyPipeline(BasePipeline):
     def __init__(self, persist_dir: str, output_folder: str, model_name: str = "llama3.2"):
@@ -185,13 +207,7 @@ embedding = embedder.embed_one("what is a database?")
 
 ---
 
-## Requirements
 
-- Python 3.13+
-- [Ollama](https://ollama.com) installed and running (for LLM features)
-- NVIDIA GPU with CUDA 12.8+ (optional, falls back to CPU)
-
----
 
 ## PyTorch with CUDA
 
@@ -219,6 +235,43 @@ from pyragcore.exceptions import (
 )
 ```
 
+---
+## Custom Backends (v0.2.0+)
+
+You can now swap any component with your own implementation:
+
+### Custom Embedder
+```python
+from pyragcore import BaseEmbedder
+
+class MyEmbedder(BaseEmbedder):
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        # your implementation
+        ...
+    
+    def embed_one(self, text: str) -> list[float]:
+        ...
+    
+    def get_dimension(self) -> int:
+        return 768
+if __name__=="__main__":
+    rag = RagPipeline("memory", "output", embedder=MyEmbedder())
+```
+
+
+### Custom Vector Store
+```python
+from pyragcore import BaseVectorStore
+
+class MyVectorStore(BaseVectorStore):
+    def add(self, embeddings, documents, metadata, ids):
+        ...
+    
+    def search(self, query_embedding, k=5):
+        ...
+if __name__ =="__main__":
+    rag = RagPipeline("memory", "output", vector_store=MyVectorStore())
+```
 ---
 
 ## Projects Built with pyragcore

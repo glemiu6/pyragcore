@@ -1,10 +1,11 @@
+#pyragcore/embeddings/embedder.py
 import torch
+from pyragcore.interfaces.base_embedder import BaseEmbedder
 from sentence_transformers import SentenceTransformer
-from typing import List, Any
 from langid.langid import LanguageIdentifier,model
 from pyragcore.exceptions import EmbeddingException
-class Embedder:
-    def __init__(self,model_name:str="all-mpnet-base-v2"):
+class Embedder(BaseEmbedder):
+    def __init__(self,model_name:str="all-mpnet-base-v2",device:str= "cuda" if torch.cuda.is_available() else "cpu"):
         """
         Embedder: Wraps a SentenceTransformer model and provides utilities for embedding text into
         vectors representation and detects language for a single input or batches.
@@ -12,27 +13,10 @@ class Embedder:
         embedder = Embedder()
         embeddings=embedder.embed([text])
         """
-        self.model=SentenceTransformer(model_name,device="cuda" if torch.cuda.is_available() else "cpu")
+        self.model=SentenceTransformer(model_name,device=device)
 
 
-    def embed(self,texts:List[str],batch_size=None)-> Any | None:
-        """
-        Embeds a list of texts into vector representations using the SentenceTransformer model.
-
-        This method encodes multiple texts at once and automatically reduces the batch size
-        if a RuntimeError occurs.
-
-        :param texts-> a list of input text to embed
-        :param batch_size-> the batch size used for encoding.Defaults to 16.
-
-        Returns:
-            List[List[float]]: A list of embedding vectors, one per input text.
-
-        Raises:
-            RuntimeError: If embedding fails even with the smallest batch size.
-        """
-        if batch_size is None:
-            batch_size=16
+    def embed(self,texts:list[str],batch_size:int=16)-> list[list[float]]:
         while batch_size>=1:
             try:
                 embeddings=self.model.encode(texts,batch_size=batch_size)
@@ -42,22 +26,15 @@ class Embedder:
                     raise EmbeddingException(f"Embedding failed: {e}")
             batch_size =batch_size//2
 
-    def embed_one(self,text:str)->List[float]:
-        """
-        Embed a single text into a vector representation
-        This method embeds one piece of text into a vector representation.
-        Used for query embedding.
-
-        :param text -> the imput text to embed
-
-        Return:
-            List[float]: The embedding vector representing the imput text.
-        """
+    def embed_one(self,text:str)->list[float]:
         try:
-            embbedings=self.model.encode(text)
-            return embbedings.tolist()
+            embeddings=self.model.encode(text)
+            return embeddings.tolist()
         except RuntimeError as e:
             raise EmbeddingException(f"Embedding failed: {e}")
+
+    def get_dimension(self) ->int:
+        return self.model.get_sentence_embedding_dimension()
 
     def detect_language(self,texts:str)->(str,float):
         """
@@ -76,8 +53,8 @@ class Embedder:
         response_language = lang if score > 0.7 else 'en'
         return response_language,score
 
-
 if __name__=="__main__":
     embedder=Embedder()
     print("Starting embedding...")
     print(embedder.embed_one("hello world"))
+    print(embedder.get_dimension())

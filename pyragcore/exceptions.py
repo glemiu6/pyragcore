@@ -1,3 +1,4 @@
+# pyragcore/exceptions.py
 class BotRagException(Exception):
     """Base exception for BotRag"""
     pass

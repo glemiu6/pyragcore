@@ -1,3 +1,13 @@
+## 0.2.0
+- Added backend agnostic interfaces (`BaseEmbedder`, `BaseVectorStore`, `BaseLLM`, `BaseRetriever`)
+- Moved `BaseLoader` and `BaseChunker` to `interfaces/` folder
+- `BasePipeline` now accepts custom `embedder` and `vector_store` implementations
+- `Embedder` now implements `BaseEmbedder` interface
+- `VectorStore` now implements `BaseVectorStore` interface
+- `Retriever` now implements `BaseRetriever` interface
+- Added `get_dimension()` method to `Embedder`
+- `model_name` parameter is now optional in `BasePipeline` — prompts user if not provided
+
 ## 0.1.11
 - fix dependency issues for darwin and linux systems on cuda
 

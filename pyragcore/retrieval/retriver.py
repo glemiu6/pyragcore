@@ -1,15 +1,17 @@
-from pyragcore.embeddings.embedder import Embedder
-from pyragcore.retrieval.vector_store import VectorStore
+#pyragcore/retrieval/retriver.py
+from pyragcore.interfaces.base_embedder import BaseEmbedder
+from pyragcore.interfaces.base_vector_store import BaseVectorStore
 from pyragcore.exceptions import RetrievalException
+from pyragcore.interfaces.base_retriever import BaseRetriever
 
-class Retriever:
-    def __init__(self,vector_store:VectorStore,embedder:Embedder):
+class Retriever(BaseRetriever):
+    def __init__(self,vector_store:BaseVectorStore,embedder:BaseEmbedder):
         self.vector_store = vector_store
         self.embedder = embedder
 
 
 
-    def retrieve(self,question,source_id,k=5):
+    def retrieve(self,question:str,source_id:str|None=None,k:int=5)-> list[dict]:
         try:
             query_embedding=self.embedder.embed_one(question)
 

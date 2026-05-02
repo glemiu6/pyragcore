@@ -1,4 +1,4 @@
-# llm/prompt.py
+# pyragcore/llm/prompt.py
 
 def build_prompt(context: str, question: str, chat_history: list[dict[str, str]] | None = None) -> str:
     """

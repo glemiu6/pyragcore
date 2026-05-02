@@ -1,17 +1,21 @@
 from abc import ABC,abstractmethod
-from pyragcore.retrieval.vector_store import VectorStore
-from pyragcore.llm.responder import Responder
-from pyragcore.embeddings.embedder import Embedder
-from pyragcore.retrieval.retriver import Retriever
+
+from pyragcore import Embedder, VectorStore, Retriever, Responder
+from pyragcore.interfaces.base_embedder import BaseEmbedder
+from pyragcore.interfaces.base_vector_store import BaseVectorStore
 from pyragcore.utils_io.choose_model import choose_model
 
 class BasePipeline(ABC):
-    def __init__(self,persist_dir:str,output_folder:str):
+    def __init__(self,persist_dir:str,
+                 output_folder:str,
+                 model_name:str|None=None,
+                 embedder:BaseEmbedder=None,
+                 vector_store:BaseVectorStore=None):
         self.persist_dir=persist_dir
         self.output_folder=output_folder
-        self.model_name=choose_model()
-        self.embedder = Embedder()
-        self.vector_store = VectorStore(dim=self.embedder.model.get_embedding_dimension(),
+        self.model_name= model_name or choose_model()
+        self.embedder = embedder or Embedder()
+        self.vector_store = vector_store or VectorStore(dim=self.embedder.get_dimension(),
                                         persist_path=self.persist_dir,
                                         autosave=True,
                                         load_if_exist=True)
