@@ -13,6 +13,10 @@ from pyragcore.interfaces.base_vector_store import BaseVectorStore
 from pyragcore.interfaces.base_llm import BaseLLM
 from pyragcore.interfaces.base_retriever import BaseRetriever
 
+
+#configuration
+from pyragcore.config import RagConfig
+
 # exceptions
 from pyragcore.exceptions import (
     BotRagException,
@@ -36,6 +40,8 @@ __all__ = [
     "BaseVectorStore",
     "BaseLLM",
     "BaseRetriever",
+    #configuration
+    "RagConfig",
     # exceptions
     "BotRagException",
     "EmbeddingException",

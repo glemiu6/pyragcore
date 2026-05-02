@@ -1,3 +1,7 @@
+## 0.2.3
+- Add `RagConfig` for all the parameters configuration
+
+
 ## 0.2.1
 - rename `Retriever`->`FaissRetriever`
 - rename `Embedder`->`SentenceTransformerEmbedder`
