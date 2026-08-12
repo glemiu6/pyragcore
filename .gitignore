@@ -219,3 +219,5 @@ __marimo__/
 
 #Build
 rebuild.sh
+.DS_Store
+pyragcore/.DS_Store
