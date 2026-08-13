@@ -23,3 +23,11 @@ class BaseEmbedder(ABC):
         Return the embedding dimension.
         """
         pass
+
+    @abstractmethod
+    def get_tag(self)->str:
+        """
+        Return a short identifier for this embedder (backend + model name)
+        Used by FaissVectorStore to detect accidental embedder mixing.
+        """
+        pass

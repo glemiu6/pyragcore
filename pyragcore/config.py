@@ -1,6 +1,7 @@
 #pyragcore/config.py
 from dataclasses import dataclass
 
+
 @dataclass
 class RagConfig:
     # LLM settings
@@ -9,7 +10,8 @@ class RagConfig:
 
     # Embedding settings
     embedding_model: str = "all-mpnet-base-v2"
-    device: str = "cuda"
+    embedding_backend:str = "sentence_transformer"
+    device: str|None = None
     batch_size: int = 64
 
     # Chunking settings
