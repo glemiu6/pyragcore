@@ -9,8 +9,8 @@ class RagConfig:
     stream: bool = True
 
     # Embedding settings
-    embedding_model: str = "all-mpnet-base-v2"
-    embedding_backend:str = "sentence_transformer"
+    embedding_model: str = "mxbai-embed-large:latest"
+    embedding_backend:str = "ollama"
     device: str|None = None
     batch_size: int = 64
 

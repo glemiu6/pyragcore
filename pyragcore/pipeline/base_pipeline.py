@@ -4,6 +4,7 @@ from pyragcore.embeddings.sentencetransformerembedder import SentenceTransformer
 from pyragcore.retrieval.vector_store import FaissVectorStore
 from pyragcore.retrieval.retriver import FaissRetriever
 from pyragcore.llm.ollama_llm import OllamaResponder
+from pyragcore.ingestion.chunker import Chunker
 from pyragcore.interfaces.base_embedder import BaseEmbedder
 from pyragcore.interfaces.base_vector_store import BaseVectorStore
 from pyragcore.interfaces.base_llm import BaseLLM
@@ -18,7 +19,8 @@ class BasePipeline(ABC):
                  model_name: str | None = None,
                  embedder: BaseEmbedder = None,
                  vector_store: BaseVectorStore = None,
-                 llm: BaseLLM = None):
+                 llm: BaseLLM = None,
+                 chunker: Chunker = None):
         self.persist_dir = persist_dir
         self.output_folder = output_folder
         self.config = config or RagConfig()
@@ -37,12 +39,30 @@ class BasePipeline(ABC):
             metric=self.config.metric
         )
         self.retriever = FaissRetriever(self.vector_store, self.embedder)
-        self.llm = llm or OllamaResponder(self.model_name)
+        if llm is not None:
+            self.llm = llm
+        else:
+            self.llm = OllamaResponder(self.model_name)
+        self.chunker = chunker or Chunker()
         self._voice = None
 
     @abstractmethod
     def ingest(self, source: str) -> str:
         pass
+
+    def chunk_text(self, text: str, metadata: dict) -> list[dict]:
+        """
+        Preferred way for ingest() implementations to chunk text — applies this
+        pipeline's configured chunk_size/chunk_overlap/max_tokens automatically,
+        instead of each ingest() needing to read RagConfig itself.
+        """
+        return self.chunker.chunk(
+            text,
+            metadata,
+            size=self.config.chunk_size,
+            overlap=self.config.chunk_overlap,
+            max_tokens=self.config.max_tokens,
+        )
 
     def add_to_store(self, embeddings: list[list[float]], documents: list[str],
                       metadata: list[dict], ids: list[str]) -> None:

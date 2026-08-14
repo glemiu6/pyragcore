@@ -1,54 +1,31 @@
 #pyragcore/__init__.py
-from pyragcore.pipeline.base_pipeline import BasePipeline
-from pyragcore.embeddings.sentencetransformerembedder import SentenceTransformerEmbedder
-from pyragcore.retrieval.vector_store import FaissVectorStore
-from pyragcore.retrieval.retriver import FaissRetriever
-from pyragcore.llm.ollama_llm import OllamaResponder
+"""
+Lazy re-exports so `import pyragcore` (or importing any single submodule)
+doesn't force torch/sentence-transformers/langchain-ollama to load unless
+the specific symbol that needs them is actually accessed.
+"""
 
-# interfaces
-from pyragcore.interfaces.base_loader import BaseLoader
-from pyragcore.interfaces.base_chunker import BaseChunker
-from pyragcore.interfaces.base_embedder import BaseEmbedder
-from pyragcore.interfaces.base_vector_store import BaseVectorStore
-from pyragcore.interfaces.base_llm import BaseLLM
-from pyragcore.interfaces.base_retriever import BaseRetriever
+_LAZY_EXPORTS = {
+    "BasePipeline": "pyragcore.pipeline.base_pipeline",
+    "BaseEmbedder": "pyragcore.interfaces.base_embedder",
+    "BaseVectorStore": "pyragcore.interfaces.base_vector_store",
+    "BaseLLM": "pyragcore.interfaces.base_llm",
+    "FaissVectorStore": "pyragcore.retrieval.vector_store",
+    "FaissRetriever": "pyragcore.retrieval.retriver",
+    "SentenceTransformerEmbedder": "pyragcore.embeddings.sentencetransformerembedder",
+    "OllamaEmbedder": "pyragcore.embeddings.ollama_embedder",
+    "OllamaResponder": "pyragcore.llm.ollama_llm",
+    "Chunker": "pyragcore.ingestion.chunker",
+    "RagConfig": "pyragcore.config",
+}
 
 
-#configuration
-from pyragcore.config import RagConfig
+def __getattr__(name: str):
+    if name in _LAZY_EXPORTS:
+        import importlib
+        module = importlib.import_module(_LAZY_EXPORTS[name])
+        return getattr(module, name)
+    raise AttributeError(f"module 'pyragcore' has no attribute '{name}'")
 
-# exceptions
-from pyragcore.exceptions import (
-    BotRagException,
-    EmbeddingException,
-    RetrievalException,
-    VectorStoreException,
-    ModelNotFoundException,
-)
-
-__all__ = [
-    # concrete classes
-    "BasePipeline",
-    "SentenceTransformerEmbedder",
-    "FaissVectorStore",
-    "FaissRetriever",
-    "OllamaResponder",
-    # interfaces
-    "BaseLoader",
-    "BaseChunker",
-    "BaseEmbedder",
-    "BaseVectorStore",
-    "BaseLLM",
-    "BaseRetriever",
-    #configuration
-    "RagConfig",
-    # exceptions
-    "BotRagException",
-    "EmbeddingException",
-    "RetrievalException",
-    "VectorStoreException",
-    "ModelNotFoundException",
-]
-
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "Vlad Digori"
