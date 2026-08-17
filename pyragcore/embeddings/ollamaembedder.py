@@ -20,7 +20,7 @@ class OllamaEmbedder(BaseEmbedder):
 
     def embed(self, text: list[str]) -> list[list[float]]:
         try:
-            return self.model.embed_documents(texts)
+            return self.model.embed_documents(text)
         except Exception as e:
             raise EmbeddingException(f"Ollama embeddings failed: {e}") from e
 
