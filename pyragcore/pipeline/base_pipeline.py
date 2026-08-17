@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-from pyragcore.embeddings.sentencetransformerembedder import SentenceTransformerEmbedder
 from pyragcore.retrieval.vector_store import FaissVectorStore
 from pyragcore.retrieval.retriver import FaissRetriever
 from pyragcore.llm.ollama_llm import OllamaResponder
@@ -26,10 +25,7 @@ class BasePipeline(ABC):
         self.config = config or RagConfig()
         self.model_name = model_name or self.config.model_name or choose_model()
 
-        embedder_kwargs = {"model_name": self.config.embedding_model}
-        if self.config.device is not None:
-            embedder_kwargs["device"] = self.config.device
-        self.embedder = embedder or SentenceTransformerEmbedder(**embedder_kwargs)
+        self.embedder = embedder or self._build_embedder()
 
         self.vector_store = vector_store or FaissVectorStore(
             dim=self.embedder.get_dimension(),
@@ -45,6 +41,34 @@ class BasePipeline(ABC):
             self.llm = OllamaResponder(self.model_name)
         self.chunker = chunker or Chunker()
         self._voice = None
+
+    def _build_embedder(self) -> BaseEmbedder:
+        """
+        Build the embedder configured by self.config.embedding_backend.
+        Only called when no `embedder=` is explicitly injected into the pipeline.
+
+        Supported backends:
+            "ollama"                -> OllamaEmbedder
+            "sentence_transformers" -> SentenceTransformerEmbedder
+        """
+        backend = self.config.embedding_backend
+
+        if backend == "ollama":
+            from pyragcore.embeddings.ollamaembedder import OllamaEmbedder
+            return OllamaEmbedder(model_name=self.config.embedding_model)
+
+        elif backend == "sentence_transformers":
+            from pyragcore.embeddings.sentencetransformerembedder import SentenceTransformerEmbedder
+            embedder_kwargs = {"model_name": self.config.embedding_model}
+            if self.config.device is not None:
+                embedder_kwargs["device"] = self.config.device
+            return SentenceTransformerEmbedder(**embedder_kwargs)
+
+        else:
+            raise ValueError(
+                f"Unknown embedding_backend '{backend}'. "
+                f"Expected 'ollama' or 'sentence_transformers'."
+            )
 
     @abstractmethod
     def ingest(self, source: str) -> str:
