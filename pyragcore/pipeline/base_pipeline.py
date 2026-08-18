@@ -38,7 +38,7 @@ class BasePipeline(ABC):
         if llm is not None:
             self.llm = llm
         else:
-            self.llm = OllamaResponder(self.model_name)
+            self.llm = OllamaResponder(self.model_name,base_url=self.config.ollama_base_url)
         self.chunker = chunker or Chunker()
         self._voice = None
 

@@ -7,6 +7,7 @@ class RagConfig:
     # LLM settings
     model_name: str|None = None
     stream: bool = True
+    ollama_base_url: str | None = None
 
     # Embedding settings
     embedding_model: str = "mxbai-embed-large:latest"
