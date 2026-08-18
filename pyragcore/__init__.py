@@ -27,5 +27,5 @@ def __getattr__(name: str):
         return getattr(module, name)
     raise AttributeError(f"module 'pyragcore' has no attribute '{name}'")
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __author__ = "Vlad Digori"
